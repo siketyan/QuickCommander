@@ -62,9 +62,8 @@ namespace QuickCommander
                     ((App)Application.Current).Shutdown();
                     break;
 
-                case "msg":
-                    if (args.Length < 1) return;
-                    MessageBox.Show(args[0]);
+                default:
+                    API.CommandManager.Execute(cmd, args);
                     break;
             }
         }

@@ -112,7 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuickCommander.API\QuickCommander.API.csproj">
-      <Project>{37E07841-422B-4CD0-A2D7-08C3BEFF24D3}</Project>
+      <Project>{37e07841-422b-4cd0-a2d7-08c3beff24d3}</Project>
       <Name>QuickCommander.API</Name>
     </ProjectReference>
   </ItemGroup>
