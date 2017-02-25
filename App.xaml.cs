@@ -1,4 +1,5 @@
 ﻿using Kennedy.ManagedHooks;
+using System.Collections.Generic;
 using System.Windows;
 using Forms = System.Windows.Forms;
 
@@ -11,10 +12,17 @@ namespace QuickCommander
     {
         private const int SIDE_MARGIN = 256;
         private KeyboardHook globalHook;
+        private List<Plugin> plugins;
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            plugins = PluginManager.FindPlugins<List<Plugin>>();
+            foreach (Plugin p in plugins)
+            {
+                MessageBox.Show("Name: " + p.Name + "\nAuthor: " + p.Author + "\nVersion: " + p.Version);
+            }
 
             var window = new MainWindow();
             var screen = Forms.Screen.AllScreens[0];
@@ -30,6 +38,14 @@ namespace QuickCommander
 
             window.Show();
             window.ShowCommandLine();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            globalHook.UninstallHook();
+            PluginManager.DisablePlugins(plugins);
         }
     }
 }

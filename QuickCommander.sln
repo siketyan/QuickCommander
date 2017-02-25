@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickCommander", "QuickCommander.csproj", "{7EB74193-6358-4EF4-A0E8-557FFC1A1EA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickCommander.API", "..\QuickCommander.API\QuickCommander.API.csproj", "{37E07841-422B-4CD0-A2D7-08C3BEFF24D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickCommander.SamplePlugin", "..\QuickCommander.SamplePlugin\QuickCommander.SamplePlugin.csproj", "{CCBF8085-1F4C-42F8-BC07-EFCAEFE3298F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{7EB74193-6358-4EF4-A0E8-557FFC1A1EA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EB74193-6358-4EF4-A0E8-557FFC1A1EA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EB74193-6358-4EF4-A0E8-557FFC1A1EA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37E07841-422B-4CD0-A2D7-08C3BEFF24D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E07841-422B-4CD0-A2D7-08C3BEFF24D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E07841-422B-4CD0-A2D7-08C3BEFF24D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E07841-422B-4CD0-A2D7-08C3BEFF24D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCBF8085-1F4C-42F8-BC07-EFCAEFE3298F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCBF8085-1F4C-42F8-BC07-EFCAEFE3298F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCBF8085-1F4C-42F8-BC07-EFCAEFE3298F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCBF8085-1F4C-42F8-BC07-EFCAEFE3298F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
