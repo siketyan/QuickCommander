@@ -3,3 +3,6 @@
 bin
 obj
 packages
+
+# Files
+*.dll
