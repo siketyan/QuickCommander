@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" WindowStyle="None" FontFamily="Segoe UI Light, Yu Gothic UI"
-        Title="MainWindow" Height="48" Background="#272727" Name="Window"
+        Title="MainWindow" Height="0" Background="#272727" Name="Window"
         AllowsTransparency="True" ResizeMode="NoResize" Topmost="True">
     <Window.Resources>
         <Storyboard x:Key="ShowAnimation">
@@ -21,9 +21,9 @@
     <Border BorderBrush="#777" BorderThickness="1,0,1,1">
         <DockPanel Margin="10,0">
             <Label Foreground="White" FontSize="20" Padding="10,9,5,9"  Content=">" />
-            <TextBox Background="Transparent" BorderThickness="0"
+            <TextBox x:Name="Command"  Background="Transparent" BorderThickness="0"
                      Foreground="White" FontSize="20" Padding="9"
-                     Text="command" CaretBrush="White" />
+                     CaretBrush="White" KeyDown="OnKeyDown" />
         </DockPanel>
     </Border>
 </Window>
