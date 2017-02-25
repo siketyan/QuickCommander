@@ -116,9 +116,7 @@ namespace QuickCommander
             if (isVisible) return;
             isVisible = true;
 
-            Storyboard sb = FindResource("ShowAnimation") as Storyboard;
-            sb.Completed += (sender, e) => Keyboard.Focus(Command);
-            sb.Begin();
+            ChangeHeight(48, new Duration(new TimeSpan(300)));
         }
 
         public void CloseCommandLine()
@@ -126,9 +124,15 @@ namespace QuickCommander
             if (!isVisible) return;
             isVisible = false;
 
-            Storyboard sb = FindResource("CloseAnimation") as Storyboard;
-            sb.Completed += (sender, e) => Command.Text = "";
-            sb.Begin();
+            ChangeHeight(0, new Duration(new TimeSpan(300)), () => Command.Text = "");
+        }
+
+        private void ChangeHeight(double newHeight, Duration duration, Action onCompleted = null)
+        {
+            var animation = new DoubleAnimation(newHeight, duration);
+            if (onCompleted != null) animation.Completed += (sender, e) => onCompleted();
+
+            BeginAnimation(HeightProperty, animation);
         }
     }
 }

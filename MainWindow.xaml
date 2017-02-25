@@ -6,18 +6,6 @@
         mc:Ignorable="d" WindowStyle="None" FontFamily="Segoe UI Light, Yu Gothic UI"
         Title="MainWindow" Height="0" Background="#272727" Name="Window" ShowInTaskbar="False"
         AllowsTransparency="True" ResizeMode="NoResize" Topmost="True" Loaded="OnLoad">
-    <Window.Resources>
-        <Storyboard x:Key="ShowAnimation">
-            <DoubleAnimation Storyboard.TargetName="Window"
-                             Storyboard.TargetProperty="Height"
-                             To="48" Duration="0:0:0.3" />
-        </Storyboard>
-        <Storyboard x:Key="CloseAnimation">
-            <DoubleAnimation Storyboard.TargetName="Window"
-                             Storyboard.TargetProperty="Height"
-                             To="0" Duration="0:0:0.3" />
-        </Storyboard>
-    </Window.Resources>
     <Border BorderBrush="#777" BorderThickness="1,0,1,1">
         <DockPanel Margin="10,0">
             <Label Foreground="White" FontSize="20" Padding="10,9,5,9"  Content=">" />
