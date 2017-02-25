@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" WindowStyle="None" FontFamily="Segoe UI Light, Yu Gothic UI"
-        Title="MainWindow" Height="0" Background="#272727" Name="Window"
-        AllowsTransparency="True" ResizeMode="NoResize" Topmost="True">
+        Title="MainWindow" Height="0" Background="#272727" Name="Window" ShowInTaskbar="False"
+        AllowsTransparency="True" ResizeMode="NoResize" Topmost="True" Loaded="OnLoad">
     <Window.Resources>
         <Storyboard x:Key="ShowAnimation">
             <DoubleAnimation Storyboard.TargetName="Window"

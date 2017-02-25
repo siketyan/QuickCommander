@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media.Animation;
 
 namespace QuickCommander
@@ -15,18 +17,21 @@ namespace QuickCommander
             Deactivated += (sender, e) => CloseCommandLine();
         }
 
-        public void ShowCommandLine()
+        private void OnLoad(object sender, RoutedEventArgs e)
         {
-            Storyboard sb = FindResource("ShowAnimation") as Storyboard;
-            sb.Completed += (sender, e) => Keyboard.Focus(Command);
-            sb.Begin();
-        }
+            WindowInteropHelper wndHelper = new WindowInteropHelper(this);
 
-        public void CloseCommandLine()
-        {
-            Storyboard sb = FindResource("CloseAnimation") as Storyboard;
-            sb.Completed += (sender, e) => Command.Text = "";
-            sb.Begin();
+            int exStyle = (int)NativeMethods.GetWindowLong(
+                                   wndHelper.Handle,
+                                   (int)NativeMethods.GetWindowLongFields.GWL_EXSTYLE
+                               );
+
+            exStyle |= (int)NativeMethods.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
+            NativeMethods.SetWindowLong(
+                wndHelper.Handle,
+                (int)NativeMethods.GetWindowLongFields.GWL_EXSTYLE,
+                (IntPtr)exStyle
+            );
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -44,6 +49,20 @@ namespace QuickCommander
                     CloseCommandLine();
                     break;
             }
+        }
+
+        public void ShowCommandLine()
+        {
+            Storyboard sb = FindResource("ShowAnimation") as Storyboard;
+            sb.Completed += (sender, e) => Keyboard.Focus(Command);
+            sb.Begin();
+        }
+
+        public void CloseCommandLine()
+        {
+            Storyboard sb = FindResource("CloseAnimation") as Storyboard;
+            sb.Completed += (sender, e) => Command.Text = "";
+            sb.Begin();
         }
     }
 }
