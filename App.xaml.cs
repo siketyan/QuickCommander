@@ -21,7 +21,12 @@ namespace QuickCommander
             plugins = PluginManager.FindPlugins<List<Plugin>>();
             foreach (Plugin p in plugins)
             {
-                MessageBox.Show("Name: " + p.Name + "\nAuthor: " + p.Author + "\nVersion: " + p.Version);
+                MessageBox.Show(
+                    "Name: " + p.Name
+                        + "\nDescription: "+ p.Description
+                        + "\nAuthor: " + p.Author
+                        + "\nVersion: " + p.Version
+                );
             }
 
             var window = new MainWindow();

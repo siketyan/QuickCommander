@@ -51,9 +51,10 @@ namespace QuickCommander
 
     public class Plugin
     {
-        public string Name { get; private set; }
-        public string Author { get; private set; }
-        public string Version { get; private set; }
+        public string Name { get { return instance.Name; } }
+        public string Description { get { return instance.Description; } }
+        public string Author { get { return instance.Author; } }
+        public string Version { get { return instance.Version; } }
         public string Location { get; private set; }
         public string ClassName { get; private set; }
 
@@ -73,10 +74,6 @@ namespace QuickCommander
             {
                 throw new Exception("プラグイン " + Location + " が正しく読み込まれませんでした。");
             }
-
-            Name = instance.Name;
-            Author = instance.Author;
-            Version = instance.Version;
 
             instance.OnEnable();
         }
