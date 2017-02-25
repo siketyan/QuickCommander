@@ -115,7 +115,7 @@ namespace QuickCommander
             if (isVisible) return;
             isVisible = true;
 
-            ChangeHeight(48, new Duration(new TimeSpan(300)));
+            ChangeHeight(48, new Duration(TimeSpan.FromMilliseconds(300)));
         }
 
         public void CloseCommandLine()
@@ -123,7 +123,7 @@ namespace QuickCommander
             if (!isVisible) return;
             isVisible = false;
 
-            ChangeHeight(0, new Duration(new TimeSpan(300)), () => Command.Text = "");
+            ChangeHeight(0, new Duration(TimeSpan.FromMilliseconds(300)), () => Command.Text = "");
         }
 
         private void ChangeHeight(double newHeight, Duration duration, Action onCompleted = null)
