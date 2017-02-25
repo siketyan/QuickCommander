@@ -56,6 +56,10 @@ namespace QuickCommander
                 case "close":
                     CloseCommandLine();
                     break;
+
+                case "exit":
+                    ((App)Application.Current).Shutdown();
+                    break;
             }
         }
 
