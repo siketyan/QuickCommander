@@ -57,8 +57,14 @@ namespace QuickCommander
                     CloseCommandLine();
                     break;
 
+                case "quit":
                 case "exit":
                     ((App)Application.Current).Shutdown();
+                    break;
+
+                case "msg":
+                    if (args.Length < 1) return;
+                    MessageBox.Show(args[0]);
                     break;
             }
         }
