@@ -115,7 +115,9 @@ namespace QuickCommander
             if (isVisible) return;
             isVisible = true;
 
+            Activate();
             ChangeHeight(48, new Duration(TimeSpan.FromMilliseconds(300)));
+            Keyboard.Focus(Command);
         }
 
         public void CloseCommandLine()
