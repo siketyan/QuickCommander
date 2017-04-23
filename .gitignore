@@ -7,3 +7,4 @@ packages
 # Files
 *.dll
 *.sln
+*.user
