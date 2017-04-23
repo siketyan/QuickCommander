@@ -1,5 +1,8 @@
 ﻿using Kennedy.ManagedHooks;
+using QuickCommander.API;
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -14,15 +17,23 @@ namespace QuickCommander
     /// </summary>
     public partial class MainWindow : Window
     {
+        public ObservableCollection<Output> Outputs { get; set; }
+
         private bool isVisible;
         private bool isCtrlDown;
         private bool isShiftDown;
         private bool isAltDown;
+        private int screenTop;
 
-        public MainWindow()
+        public MainWindow(int screenTop)
         {
             InitializeComponent();
             Deactivated += (sender, e) => CloseCommandLine();
+
+            Outputs = new ObservableCollection<Output>();
+            DataContext = this;
+
+            this.screenTop = screenTop;
         }
 
         private void OnLoad(object sender, RoutedEventArgs e)
@@ -51,8 +62,14 @@ namespace QuickCommander
             var cmd = line[0];
             var args = (line.Length < 2) ? new string[0] : line[1].Split(' ');
 
+            Command.Text = "";
+
             switch (cmd)
             {
+                case "echo":
+                    IOManager.Out(this, args[0]);
+                    break;
+
                 case "close":
                     CloseCommandLine();
                     break;
@@ -110,13 +127,26 @@ namespace QuickCommander
             }
         }
 
+        public void OnOutput(object sender, string message)
+        {
+            var pluginName = (!(sender is MainWindow))
+                                ? ((App)Application.Current)
+                                      .plugins
+                                      .Where(p => sender == p.Instance)
+                                      .FirstOrDefault()
+                                      .Name
+                                : "QuickCommander";
+
+            Outputs.Add(new Output("[" + pluginName + "] " + message));
+        }
+
         public void ShowCommandLine()
         {
             if (isVisible) return;
             isVisible = true;
 
             Activate();
-            ChangeHeight(48, new Duration(TimeSpan.FromMilliseconds(300)));
+            ChangeLocation(screenTop - 2, new Duration(TimeSpan.FromMilliseconds(300)));
             Keyboard.Focus(Command);
         }
 
@@ -125,15 +155,15 @@ namespace QuickCommander
             if (!isVisible) return;
             isVisible = false;
 
-            ChangeHeight(0, new Duration(TimeSpan.FromMilliseconds(300)), () => Command.Text = "");
+            ChangeLocation(screenTop - 49, new Duration(TimeSpan.FromMilliseconds(300)), () => Command.Text = "");
         }
 
-        private void ChangeHeight(double newHeight, Duration duration, Action onCompleted = null)
+        private void ChangeLocation(double top, Duration duration, Action onCompleted = null)
         {
-            var animation = new DoubleAnimation(newHeight, duration);
+            var animation = new DoubleAnimation(top, duration);
             if (onCompleted != null) animation.Completed += (sender, e) => onCompleted();
 
-            BeginAnimation(HeightProperty, animation);
+            BeginAnimation(TopProperty, animation);
         }
     }
 }

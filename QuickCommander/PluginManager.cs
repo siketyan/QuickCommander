@@ -51,14 +51,13 @@ namespace QuickCommander
 
     public class Plugin
     {
-        public string Name { get { return instance.Name; } }
-        public string Description { get { return instance.Description; } }
-        public string Author { get { return instance.Author; } }
-        public string Version { get { return instance.Version; } }
+        public string Name { get { return Instance.Name; } }
+        public string Description { get { return Instance.Description; } }
+        public string Author { get { return Instance.Author; } }
+        public string Version { get { return Instance.Version; } }
         public string Location { get; private set; }
         public string ClassName { get; private set; }
-
-        private IPlugin instance;
+        public IPlugin Instance { get; private set; }
 
         public Plugin(string path, string className)
         {
@@ -68,19 +67,19 @@ namespace QuickCommander
             try
             {
                 Assembly asm = Assembly.LoadFrom(Location);
-                instance = (IPlugin)asm.CreateInstance(ClassName);
+                Instance = (IPlugin)asm.CreateInstance(ClassName);
             }
             catch
             {
                 throw new Exception("プラグイン " + Location + " が正しく読み込まれませんでした。");
             }
 
-            instance.OnEnable();
+            Instance.OnEnable();
         }
 
         public void Disable()
         {
-            instance.OnDisable();
+            Instance.OnDisable();
         }
     }
 }
