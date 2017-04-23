@@ -4,7 +4,7 @@ namespace QuickCommander.API
 {
     public class IOManager
     {
-        public event EventHandler<string> Output;
+        public event EventHandler<OutputEventArgs> Output;
 
         private static IOManager instance;
 
@@ -13,11 +13,24 @@ namespace QuickCommander.API
             instance = this;
         }
 
-        public static void Out(object sender, string message)
+        public static void Out(object sender, string message, int timeout = 2000)
         {
             if (sender == null) return;
 
-            instance.Output(sender, message);
+            instance.Output(
+                sender,
+                new OutputEventArgs
+                {
+                    Message = message,
+                    Timeout = timeout
+                }
+            );
         }
+    }
+
+    public class OutputEventArgs
+    {
+        public string Message { get; set; }
+        public int Timeout { get; set; }
     }
 }

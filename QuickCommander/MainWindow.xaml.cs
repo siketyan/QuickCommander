@@ -1,7 +1,6 @@
 ﻿using Kennedy.ManagedHooks;
 using QuickCommander.API;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -17,7 +16,7 @@ namespace QuickCommander
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ObservableCollection<Output> Outputs { get; set; }
+        public DispatcherCollection<Output> Outputs { get; set; }
 
         private bool isVisible;
         private bool isCtrlDown;
@@ -30,7 +29,7 @@ namespace QuickCommander
             InitializeComponent();
             Deactivated += (sender, e) => CloseCommandLine();
 
-            Outputs = new ObservableCollection<Output>();
+            Outputs = new DispatcherCollection<Output>();
             DataContext = this;
 
             this.screenTop = screenTop;
@@ -127,7 +126,7 @@ namespace QuickCommander
             }
         }
 
-        public void OnOutput(object sender, string message)
+        public void OnOutput(object sender, OutputEventArgs e)
         {
             var pluginName = (!(sender is MainWindow))
                                 ? ((App)Application.Current)
@@ -137,7 +136,18 @@ namespace QuickCommander
                                       .Name
                                 : "QuickCommander";
 
-            Outputs.Add(new Output("[" + pluginName + "] " + message));
+            var output = new Output(
+                             "[" + pluginName + "] " + e.Message,
+                             e.Timeout
+                         );
+
+            output.OutputTimeout += OnOutputTimeout;
+            Outputs.Add(output);
+        }
+
+        public void OnOutputTimeout(object sender, EventArgs e)
+        {
+            Outputs.Remove((Output)sender);
         }
 
         public void ShowCommandLine()
