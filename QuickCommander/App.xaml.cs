@@ -20,7 +20,7 @@ namespace QuickCommander
         {
             base.OnStartup(e);
 
-            var screen = Forms.Screen.AllScreens[0];
+            var screen = Forms.Screen.AllScreens[1];
             var rect = screen.Bounds;
             var window = new MainWindow(rect.Top)
             {
@@ -33,15 +33,6 @@ namespace QuickCommander
             io.Output += window.OnOutput;
 
             plugins = PluginManager.FindPlugins<List<Plugin>>();
-            foreach (Plugin p in plugins)
-            {
-                MessageBox.Show(
-                    "Name: " + p.Name
-                        + "\nDescription: "+ p.Description
-                        + "\nAuthor: " + p.Author
-                        + "\nVersion: " + p.Version
-                );
-            }
 
             globalHook = new KeyboardHook();
             globalHook.KeyboardEvent += window.OnGlobalKeyDown;

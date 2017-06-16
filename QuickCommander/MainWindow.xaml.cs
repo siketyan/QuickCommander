@@ -1,12 +1,14 @@
 ﻿using Kennedy.ManagedHooks;
 using QuickCommander.API;
 using System;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
-
+using System.Windows.Threading;
 using Forms = System.Windows.Forms;
 
 namespace QuickCommander
@@ -16,7 +18,7 @@ namespace QuickCommander
     /// </summary>
     public partial class MainWindow : Window
     {
-        public DispatcherCollection<Output> Outputs { get; set; }
+        public ObservableCollection<Output> Outputs { get; set; }
 
         private bool isVisible;
         private bool isCtrlDown;
@@ -29,7 +31,7 @@ namespace QuickCommander
             InitializeComponent();
             Deactivated += (sender, e) => CloseCommandLine();
 
-            Outputs = new DispatcherCollection<Output>();
+            Outputs = new ObservableCollection<Output>();
             DataContext = this;
 
             this.screenTop = screenTop;
@@ -65,7 +67,44 @@ namespace QuickCommander
 
             switch (cmd)
             {
+                case "plugin":
+                    if (args.Length < 1)
+                    {
+                        IOManager.Out(this, "A argument is required.");
+                        break;
+                    }
+
+                    var plugin = ((App)Application.Current)
+                                     .plugins
+                                     .Where(p => p.Name == args[0])
+                                     .FirstOrDefault();
+
+                    IOManager.Out(this, "Name: " + plugin.Name);
+                    IOManager.Out(this, "Description: " + plugin.Description);
+                    IOManager.Out(this, "Author: " + plugin.Author);
+                    IOManager.Out(this, "Version: " + plugin.Version);
+                    IOManager.Out(this, "Location: " + plugin.Location);
+                    IOManager.Out(this, "Class: " + plugin.ClassName);
+                    break;
+
+                case "plugins":
+                    ((App)Application.Current)
+                        .plugins
+                        .ForEach(
+                             p => IOManager.Out(
+                                      this,
+                                      p.Name + " (" + Path.GetFileName(p.Location) + ")"
+                                  )
+                         );
+                    break;
+
                 case "echo":
+                    if (args.Length < 1)
+                    {
+                        IOManager.Out(this, "A argument is required.");
+                        break;
+                    }
+
                     IOManager.Out(this, args[0]);
                     break;
 
@@ -147,7 +186,10 @@ namespace QuickCommander
 
         public void OnOutputTimeout(object sender, EventArgs e)
         {
-            Outputs.Remove((Output)sender);
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                Outputs.Remove((Output)sender);
+            }));
         }
 
         public void ShowCommandLine()
