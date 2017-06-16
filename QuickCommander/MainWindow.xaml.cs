@@ -118,7 +118,8 @@ namespace QuickCommander
                     break;
 
                 default:
-                    API.CommandManager.Execute(cmd, args);
+                    if (!API.CommandManager.Execute(cmd, args))
+                        IOManager.Out(this, "Unknown command.");
                     break;
             }
         }

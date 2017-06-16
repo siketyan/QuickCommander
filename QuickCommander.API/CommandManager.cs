@@ -16,11 +16,12 @@ namespace QuickCommander.API
             commands.Add(cmd, action);
         }
 
-        public static void Execute(string cmd, string[] args)
+        public static bool Execute(string cmd, string[] args)
         {
-            if (!commands.ContainsKey(cmd)) return;
+            if (!commands.ContainsKey(cmd)) return false;
 
             commands[cmd](args);
+            return true;
         }
     }
 
