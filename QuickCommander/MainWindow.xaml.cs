@@ -1,6 +1,7 @@
 ﻿using Kennedy.ManagedHooks;
 using QuickCommander.API;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace QuickCommander
 
             var line = Command.Text.Split(new char[]{' '}, 2);
             var cmd = line[0];
-            var args = (line.Length < 2) ? new string[0] : line[1].Split(' ');
+            var args = (line.Length < 2) ? new string[0] : ParseArgs(line[1]);
 
             Command.Text = "";
 
@@ -164,6 +165,47 @@ namespace QuickCommander
                         break;
                 }
             }
+        }
+
+        private string[] ParseArgs(string args)
+        {
+            var argsList = new List<string>();
+            var temp = "";
+            char? quotation = null;
+            foreach (var c in args.Trim())
+            {
+                if (c != '"' && c != '\'')
+                {
+                    if (quotation == null && c == ' ')
+                    {
+                        argsList.Add(temp);
+                        temp = "";
+                    }
+                    else
+                    {
+                        temp += c;
+                    }
+                }
+                else
+                {
+                    if (quotation == null)
+                    {
+                        quotation = c;
+                    }
+                    else if(quotation == c)
+                    {
+                        argsList.Add(temp);
+                        temp = "";
+                        quotation = null;
+                    }
+                    else
+                    {
+                        temp += c;
+                    }
+                }
+            }
+
+            return argsList.ToArray();
         }
 
         public void OnOutput(object sender, OutputEventArgs e)
