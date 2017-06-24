@@ -84,7 +84,7 @@ namespace QuickCommander
                 case "plugin":
                     if (args.Length < 1)
                     {
-                        IOManager.Out(this, "A argument is required.");
+                        IOManager.Out(this, "Usage: plugin [name]");
                         break;
                     }
 
@@ -143,7 +143,7 @@ namespace QuickCommander
                 case "echo":
                     if (args.Length < 1)
                     {
-                        IOManager.Out(this, "A argument is required.");
+                        IOManager.Out(this, "Usage: echo [message]");
                         break;
                     }
 
