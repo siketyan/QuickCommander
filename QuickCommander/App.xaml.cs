@@ -29,8 +29,7 @@ namespace QuickCommander
                 Width = rect.Width - (SIDE_MARGIN * 2)
             };
 
-            IOManager io = new IOManager();
-            io.Output += window.OnOutput;
+            IOManager.Output += window.OnOutput;
 
             plugins = PluginManager.FindPlugins<List<Plugin>>();
 

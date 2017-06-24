@@ -2,22 +2,15 @@
 
 namespace QuickCommander.API
 {
-    public class IOManager
+    public static class IOManager
     {
-        public event EventHandler<OutputEventArgs> Output;
-
-        private static IOManager instance;
-
-        public IOManager()
-        {
-            instance = this;
-        }
-
+        public static event EventHandler<OutputEventArgs> Output;
+        
         public static void Out(object sender, string message, int timeout = 2000)
         {
             if (sender == null) return;
 
-            instance.Output(
+            Output?.Invoke(
                 sender,
                 new OutputEventArgs
                 {
