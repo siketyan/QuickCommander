@@ -30,6 +30,7 @@ namespace QuickCommander
             };
 
             IOManager.Output += window.OnOutput;
+            ConfigManager.ConfigSetted += window.OnConfigSet;
 
             plugins = PluginManager.FindPlugins<List<Plugin>>();
 

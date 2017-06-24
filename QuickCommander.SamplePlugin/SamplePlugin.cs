@@ -13,7 +13,12 @@ namespace QuickCommander.SamplePlugin
         public void OnEnable()
         {
             MessageBox.Show("SamplePlugin: OnEnable");
-            CommandManager.RegistCommand("sample", args => MessageBox.Show("SamplePlugin: " + args[0]));
+            CommandManager.RegistCommand(
+                "sample",
+                args => IOManager.Out(
+                    this, (string)ConfigManager.Get("SamplePlugin.Message", "Default")
+                )
+            );
         }
 
         public void OnDisable()

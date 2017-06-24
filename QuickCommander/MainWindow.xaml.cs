@@ -1,10 +1,12 @@
 ﻿using Kennedy.ManagedHooks;
+using Newtonsoft.Json;
 using QuickCommander.API;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -29,6 +31,17 @@ namespace QuickCommander
 
         public MainWindow(int screenTop)
         {
+            if (File.Exists("config.json"))
+            {
+                var json = File.ReadAllText("config.json");
+                var conf = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+                ConfigManager.Load(conf);
+            }
+            else
+            {
+                ConfigManager.Load();
+            }
+
             InitializeComponent();
             Deactivated += (sender, e) => CloseCommandLine();
 
@@ -97,6 +110,34 @@ namespace QuickCommander
                                       p.Name + " (" + Path.GetFileName(p.Location) + ")"
                                   )
                          );
+                    break;
+
+                case "config":
+                    if (args.Length < 2 ||
+                        (args[0].ToLower() != "get" && args[0].ToLower() != "set") ||
+                        (args[0].ToLower() == "set" && args.Length < 3))
+                    {
+                        IOManager.Out(this, "Usage: config [get|set] [key] (value: if 'set' operation)");
+                        break;
+                    }
+
+                    if (args[0].ToLower() == "get")
+                    {
+                        var value = ConfigManager.Get(args[1]);
+                        if (value == null)
+                        {
+                            IOManager.Out(this, "Value of key " + args[1] + " does not exist or the value is null.");
+                        }
+                        else
+                        {
+                            IOManager.Out(this, args[1] + " : " + ConfigManager.Get(args[1]));
+                        }
+                    }
+                    else
+                    {
+                        ConfigManager.Set(args[1], args[2]);
+                        IOManager.Out(this, "Setted.");
+                    }
                     break;
 
                 case "echo":
@@ -205,6 +246,8 @@ namespace QuickCommander
                 }
             }
 
+            if (temp != "") argsList.Add(temp);
+
             return argsList.ToArray();
         }
 
@@ -233,6 +276,16 @@ namespace QuickCommander
             {
                 Outputs.Remove((Output)sender);
             }));
+        }
+
+        public void OnConfigSet(object sender, ConfigSettedEventArgs e)
+        {
+            Task.Run(() =>
+            {
+                var conf = ConfigManager.GetAll();
+                var json = JsonConvert.SerializeObject(conf);
+                File.WriteAllText("config.json", json);
+            });
         }
 
         public void ShowCommandLine()
