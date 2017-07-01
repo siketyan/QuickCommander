@@ -133,7 +133,8 @@ namespace QuickCommander
                             ConfigManager.Set("QuickCommander.Exec.List", new Dictionary<string, string>());
                         }
 
-                        ((Dictionary<string, string>)list).Add(args[0], args[1]);
+                        ((Dictionary<string, string>)ConfigManager.Get("QuickCommander.Exec.List")).Add(args[0], args[1]);
+                        IOManager.Out(this, "Success.");
                     }
                     break;
 
