@@ -4,6 +4,7 @@ using QuickCommander.API;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -81,6 +82,61 @@ namespace QuickCommander
 
             switch (cmd)
             {
+                case "exec":
+                    {
+                        if (args.Length < 1)
+                        {
+                            IOManager.Out(this, "Usage: exec [name]");
+                            break;
+                        }
+
+                        var list = ConfigManager.Get("QuickCommander.Exec.List");
+                        if (list != null && !(list is Dictionary<string, string>))
+                        {
+                            IOManager.Out(this, "Type of config 'QuickCommander.Exec.List' is invalid.");
+                            break;
+                        }
+
+                        if (list == null || !((Dictionary<string, string>)list).ContainsKey(args[0]))
+                        {
+                            IOManager.Out(this, "Specified name is not registed.");
+                            break;
+                        }
+
+                        Process.Start(((Dictionary<string, string>)list)[args[0]]);
+                    }
+                    break;
+
+                case "exec-regist":
+                    {
+                        if (args.Length < 2)
+                        {
+                            IOManager.Out(this, "Usage: exec-regist [name] [path to file]");
+                            break;
+                        }
+
+                        if (!File.Exists(args[1]))
+                        {
+                            IOManager.Out(this, "The file does not exist.");
+                            break;
+                        }
+
+                        var list = ConfigManager.Get("QuickCommander.Exec.List");
+                        if (list != null && !(list is Dictionary<string, string>))
+                        {
+                            IOManager.Out(this, "Type of config 'QuickCommander.Exec.List' is invalid.");
+                            break;
+                        }
+
+                        if (list == null)
+                        {
+                            ConfigManager.Set("QuickCommander.Exec.List", new Dictionary<string, string>());
+                        }
+
+                        ((Dictionary<string, string>)list).Add(args[0], args[1]);
+                    }
+                    break;
+
                 case "plugin":
                     if (args.Length < 1)
                     {
