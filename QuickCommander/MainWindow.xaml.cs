@@ -12,7 +12,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
-using System.Windows.Threading;
 using Forms = System.Windows.Forms;
 
 namespace QuickCommander
@@ -20,7 +19,7 @@ namespace QuickCommander
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public ObservableCollection<Output> Outputs { get; set; }
 
@@ -54,9 +53,8 @@ namespace QuickCommander
 
         private void OnLoad(object sender, RoutedEventArgs e)
         {
-            WindowInteropHelper wndHelper = new WindowInteropHelper(this);
-
-            int exStyle = (int)NativeMethods.GetWindowLong(
+            var wndHelper = new WindowInteropHelper(this);
+            var exStyle = (int)NativeMethods.GetWindowLong(
                                    wndHelper.Handle,
                                    (int)NativeMethods.GetWindowLongFields.GWL_EXSTYLE
                                );
@@ -74,9 +72,9 @@ namespace QuickCommander
             if (e.Key == Key.Escape) CloseCommandLine();
             if (e.Key != Key.Enter) return;
 
-            var line = Command.Text.Split(new char[]{' '}, 2);
+            var line = Command.Text.Split(new []{' '}, 2);
             var cmd = line[0];
-            var args = (line.Length < 2) ? new string[0] : ParseArgs(line[1]);
+            var args = line.Length < 2 ? new string[0] : ParseArgs(line[1]);
 
             Command.Text = "";
 
@@ -147,8 +145,8 @@ namespace QuickCommander
                         }
 
                         var screens = Forms.Screen.AllScreens;
-                        var isValidID = int.TryParse(args[0], out int id);
-                        if (!isValidID || screens.Length <= id)
+                        var isValidId = int.TryParse(args[0], out int id);
+                        if (!isValidId || screens.Length <= id)
                         {
                             IOManager.Out(this, "Specified ID is invalid.");
                             break;
@@ -194,8 +192,7 @@ namespace QuickCommander
 
                     var plugin = ((App)Application.Current)
                                      .plugins
-                                     .Where(p => p.Name == args[0])
-                                     .FirstOrDefault();
+                                     .FirstOrDefault(p => p.Name == args[0]);
 
                     IOManager.Out(this, "Name: " + plugin.Name);
                     IOManager.Out(this, "Description: " + plugin.Description);
@@ -360,8 +357,7 @@ namespace QuickCommander
             var pluginName = (!(sender is MainWindow))
                                 ? ((App)Application.Current)
                                       .plugins
-                                      .Where(p => sender == p.Instance)
-                                      .FirstOrDefault()
+                                      .FirstOrDefault(p => sender == p.Instance)
                                       .Name
                                 : "QuickCommander";
 

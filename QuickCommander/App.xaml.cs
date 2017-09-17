@@ -9,7 +9,7 @@ namespace QuickCommander
     /// <summary>
     /// App.xaml の相互作用ロジック
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         public const int SIDE_MARGIN = 256;
 
@@ -26,7 +26,7 @@ namespace QuickCommander
             {
                 Top = rect.Top - 50,
                 Left = rect.Left + SIDE_MARGIN,
-                Width = rect.Width - (SIDE_MARGIN * 2)
+                Width = rect.Width - SIDE_MARGIN * 2
             };
 
             IOManager.Output += window.OnOutput;
