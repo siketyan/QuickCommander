@@ -11,7 +11,7 @@ namespace QuickCommander
     /// </summary>
     public partial class App : Application
     {
-        private const int SIDE_MARGIN = 256;
+        public const int SIDE_MARGIN = 256;
 
         public List<Plugin> plugins;
         private KeyboardHook globalHook;

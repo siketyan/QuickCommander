@@ -138,6 +138,53 @@ namespace QuickCommander
                     }
                     break;
 
+                case "screen":
+                    {
+                        if (args.Length < 1)
+                        {
+                            IOManager.Out(this, "Usage: screen [id]");
+                            break;
+                        }
+
+                        var screens = Forms.Screen.AllScreens;
+                        var isValidID = int.TryParse(args[0], out int id);
+                        if (!isValidID || screens.Length <= id)
+                        {
+                            IOManager.Out(this, "Specified ID is invalid.");
+                            break;
+                        }
+
+                        Opacity = 0;
+                        CloseCommandLine(() =>
+                        {
+                            var screen = screens[id];
+                            var rect = screen.Bounds;
+                            screenTop = rect.Top;
+                            Top = rect.Top - 50;
+                            Left = rect.Left + App.SIDE_MARGIN;
+                            Width = rect.Width - (App.SIDE_MARGIN * 2);
+
+                            ShowCommandLine(() => Opacity = 1);
+                        });
+                    }
+                    break;
+
+                case "screens":
+                    {
+                        var screens = Forms.Screen.AllScreens;
+                        for (var i = 0; i < screens.Length; i++)
+                        {
+                            var screen = screens[i];
+                            IOManager.Out(
+                                this,
+                                i + ": "
+                                    + screen.DeviceName
+                                    + (screen.Primary ? " (Primary)" : "")
+                            );
+                        }
+                    }
+                    break;
+
                 case "plugin":
                     if (args.Length < 1)
                     {
@@ -345,22 +392,37 @@ namespace QuickCommander
             });
         }
 
-        public void ShowCommandLine()
+        public void ShowCommandLine(Action onCompleted = null)
         {
             if (isVisible) return;
             isVisible = true;
 
             Activate();
-            ChangeLocation(screenTop - 2, new Duration(TimeSpan.FromMilliseconds(300)));
-            Keyboard.Focus(Command);
+            ChangeLocation(
+                screenTop - 2,
+                new Duration(TimeSpan.FromMilliseconds(300)),
+                () =>
+                {
+                    Keyboard.Focus(Command);
+                    onCompleted?.Invoke();
+                }
+            );
         }
 
-        public void CloseCommandLine()
+        public void CloseCommandLine(Action onCompleted = null)
         {
             if (!isVisible) return;
             isVisible = false;
 
-            ChangeLocation(screenTop - 49, new Duration(TimeSpan.FromMilliseconds(300)), () => Command.Text = "");
+            ChangeLocation(
+                screenTop - 49,
+                new Duration(TimeSpan.FromMilliseconds(300)),
+                () =>
+                {
+                    Command.Text = "";
+                    onCompleted?.Invoke();
+                }
+            );
         }
 
         private void ChangeLocation(double top, Duration duration, Action onCompleted = null)
